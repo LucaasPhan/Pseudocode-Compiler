@@ -54,7 +54,7 @@ with open(fileInPath, "r") as file:
     read = file.read()
 
 linesW = seperateIntoLines(read)
-linesNW = removeWhitespace(seperateIntoLines(read))
+linesNW = removeWhitespace(linesW)
 
 programObject = []
 
