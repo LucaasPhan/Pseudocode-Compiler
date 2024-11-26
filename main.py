@@ -47,7 +47,7 @@ def removeWhitespace(lines):
 
 # taking in file path
 # fileInPath = input("Please enter the filepath where your pseudocode is stored: ")
-fileInPath = "D:/Code/Python/Pseudocode compiler/text.txt"
+fileInPath = "C:/Users/nhath/OneDrive/Documents/Pseudocode-Compiler/text.txt"
 
 # reading the pseudocode text file 
 with open(fileInPath, "r") as file:

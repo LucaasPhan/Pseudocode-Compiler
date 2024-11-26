@@ -38,6 +38,7 @@ class OUTPUT(command) :
     def run(self):
         # splitting up the string by whitespace
         wordList = self.codeLine.split()
+        print(wordList)
         # we delete the first piece which is either PRINT or OUTPUT
         del wordList[0]
         # the ending string that will be printed
@@ -50,13 +51,14 @@ class OUTPUT(command) :
         # looping through the list of words 
         for index in range(len(wordList)):
             word = wordList[index]
+            print(string_flag, word)
             # if the start of the word is "... flag thats its a string
-            if word[0] == '\"':
+            if word[0] == '\"' and not word == '\",' and len(word) >= 2:
                 # marking the beginning that this aint a variable
                 string_flag = True
                 # if the end of the word is a ..." flag that string has stopped so that it could continue checking the next item(variable or string)
                 if word[-1] == '\"':
-                    string_flag = False
+                    string_flag = False 
                     # procede to add the string but excludes the "" into the printed string
                     printed += word[1:-1]
                     continue
@@ -65,20 +67,26 @@ class OUTPUT(command) :
                     printed += word[1:]
                     # we splited the words by white space so we have to add it back
                     printed += " "
-                
+            
+            elif word == '\",':
+                printed += ""
+
             # continuing from the previous word, if this word is still in the previous string that has this ..." part which means the string is ending
-            elif word[-1] == '\"':
+            elif word[-1] == '\'':
                 # string has ended, so flag to check next item(variable or string)
                 string_flag = False
                 # print the remaining part excluding the ending ..."
                 printed += word[:-1]
 
-            # if the end of the word is ...", for example World", Name the phrase: World",
-            elif word[-2:] == '",':
-                # string has ended, so flag to check next item(variable or string) 
-                string_flag = False
-                # print the string excluding ...",
-                printed += word[:-2]
+            # # if the end of the word is ...", for example World", Name the phrase: World",
+            # elif word[-2:] == '",':
+            #     # string has ended, so flag to check next item(variable or string) 
+            #     string_flag = False
+            #     # print the string excluding ...",
+            #     printed += word[:-2]
+
+            elif word == '\"':
+                printed += ""
 
             # in case string is flagged meaning that this word is in the middle of the string that hasnt ended
             elif string_flag:
@@ -97,4 +105,5 @@ class OUTPUT(command) :
                 #     printed += str(fetch_value(word))
                 elif word == ",":
                     printed += " "
-        print(printed+"\n")
+        printed = printed.replace(',', '')
+        print(printed)
