@@ -53,57 +53,23 @@ class OUTPUT(command) :
             word = wordList[index]
             print(string_flag, word)
             # if the start of the word is "... flag thats its a string
-            if word[0] == '\"' and not word == '\",' and len(word) >= 2:
-                # marking the beginning that this aint a variable
+            if word.startswith('\"') and not string_flag:
                 string_flag = True
-                # if the end of the word is a ..." flag that string has stopped so that it could continue checking the next item(variable or string)
-                if word[-1] == '\"':
-                    string_flag = False 
-                    # procede to add the string but excludes the "" into the printed string
-                    printed += word[1:-1]
-                    continue
+                word = word[1:]
+
+            if string_flag:
+                if word.endswith('\"') or word.endswith('\",'):
+                    string_flag = False
+                    word.rstrip('",')
+                    printed += word + " "
+                else: 
+                    printed += word + " "
+            else: 
+                word = word.rstrip(',')
+                print(word)
+                if word in configures.variables:
+                    printed += configures.variables[word] + " "
                 else:
-                    # if the end of the word isnt a ..." meaning that the string isnt complete so we add the entire string excluding the initial "...
-                    printed += word[1:]
-                    # we splited the words by white space so we have to add it back
-                    printed += " "
-            
-            elif word == '\",':
-                printed += ""
-
-            # continuing from the previous word, if this word is still in the previous string that has this ..." part which means the string is ending
-            elif word[-1] == '\'':
-                # string has ended, so flag to check next item(variable or string)
-                string_flag = False
-                # print the remaining part excluding the ending ..."
-                printed += word[:-1]
-
-            # # if the end of the word is ...", for example World", Name the phrase: World",
-            # elif word[-2:] == '",':
-            #     # string has ended, so flag to check next item(variable or string) 
-            #     string_flag = False
-            #     # print the string excluding ...",
-            #     printed += word[:-2]
-
-            elif word == '\"':
-                printed += ""
-
-            # in case string is flagged meaning that this word is in the middle of the string that hasnt ended
-            elif string_flag:
-                # word[:] basically creates a shallow copy of the string
-                # prints the string only
-                printed += word[:]
-                printed += " "
-
-            # if its a variable
-            if not string_flag:
-                word = word.strip(",")
-                if word in configures.variables:  # this checks if it is a variable and if the variable exists
-                    printed += str(configures.variables[word])
-                    continue
-                # elif "[" in word:
-                #     printed += str(fetch_value(word))
-                elif word == ",":
-                    printed += " "
+                    return print("ERROR")
         printed = printed.replace(',', '')
         print(printed)
