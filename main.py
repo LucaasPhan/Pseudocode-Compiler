@@ -10,7 +10,7 @@ def getFileName(filePath):
     # turning the file path into a raw string
     raw_filePath = repr(filePath)[1:-1]
     # instead of if elsing to select the the of slash in the text, just seperate the text by 2 delimiters 
-    pattern = '|'.join(map(re.escape, "\/"))
+    pattern = '|'.join(map(re.escape, "\\/"))
     # patern = r'\\|/'
     # pattern = r'[\\/]'
     extracted_filepath = re.split(pattern, raw_filePath)[-1]
@@ -30,8 +30,9 @@ def seperateIntoLines(text):
             line = ''
         # if char is equal to the ending character and the character count also the same with the length of the text - 1 indicating the index of the last character, this line is also added
         elif char == text[-1] and charCount == len(text) - 1:
+            print("debug: ", text[-1], "-----", len(text) - 1, " charCount = ", charCount)
+            line += char
             lines.append(line)
-            line = ''
         # otherwise the char is added to the line
         else:
             line += char
@@ -42,7 +43,8 @@ def seperateIntoLines(text):
 def removeWhitespace(lines):
     for line in range(len(lines)):
         # lstrip will remove all the white spaces in front of the line whether it is tab or whitespace 
-        lines[line] = lines[line].lstrip()
+        lines[line] = lines[line].lstrip() and lines[line].rstrip()
+        print(lines[line])
     return lines
 
 # taking in file path
@@ -52,21 +54,28 @@ fileInPath = "C:/Users/nhath/OneDrive/Documents/Pseudocode-Compiler/text.txt"
 # reading the pseudocode text file 
 with open(fileInPath, "r") as file:
     read = file.read()
+    print("read: ", read)
 
 linesW = seperateIntoLines(read)
+print("LinesW: ", linesW)
 linesNW = removeWhitespace(linesW)
+print("LinesNW: ", linesNW)
+
 
 programObject = []
 
 for index in range(len(linesNW)):
     splitedLine = linesNW[index].split()
+    print("splitted: ", splitedLine) # debug
 
     if linesNW[index][:6] == "OUTPUT" or linesNW[index][:5] == "PRINT":
         print("OUTPUT detected")
+        print("OUTPUT DEBUG: ", linesW[index])
         programObject.append(commands.OUTPUT(index, index, index, linesW[index]))
         
     elif "=" == splitedLine[1]:
         print("ASSIGN detected")
+        print("ASSIGN DEBUG: ", linesW[index])
         programObject.append(commands.ASSIGN(index, index, index, linesW[index]))
         
     programObject[index].run()
