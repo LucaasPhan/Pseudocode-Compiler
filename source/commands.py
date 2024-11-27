@@ -4,6 +4,8 @@ import re
 
 # creating a configure class for storage
 configures = datastore.configures()
+# stop code 
+error = False
 
 def is_special(s): # Regex to match any string that only contains special characters 
     return bool(re.fullmatch(r'[\'\",]', s))
@@ -29,6 +31,11 @@ class ASSIGN(command):
         # taking in the variable name and the variable name and value
         varName = wordList[0]
         value = wordList[2]
+        #Detect if the value is a string or not, and is it put in double quote or not
+        if value[0:-1] != '\"' and not value.isdigit():
+            global error
+            error = True
+            return print("ERROR: String datatype should be put inside double quote.")
 
         # storing it in the dictionary
         configures.variables[varName] = value
@@ -51,12 +58,14 @@ class OUTPUT(command) :
         # using a string flag to keep track of whether it is a string or not
         string_flag = False
 
+        global error
         # print(wordList)
-
+        if error: 
+            return
         # looping through the list of words 
         for index in range(len(wordList)):
             word = wordList[index]
-            # print(string_flag, word)
+            print(string_flag, word)
 
             # if the start of the word is "... flag thats its a string
             if word.startswith('\"') and not string_flag:
@@ -68,8 +77,11 @@ class OUTPUT(command) :
                     string_flag = False
                     printed += ""
                 elif word.__contains__('\"') and len(word) >= 2:
-                    string_flag = False
-                    printed += word[:-1] + ""
+                    if word[-1] != '\"': 
+                        return print("ERROR: Unexpected character after quotation.")
+                    else: 
+                        word = word[:-1]
+                        printed += word
                 elif is_special(word):
                     string_flag = False     
                 elif word == '' or word == ' ':
@@ -81,6 +93,6 @@ class OUTPUT(command) :
                 if word in configures.variables:
                     printed += configures.variables[word] + " "
                 else:
-                    return print("ERROR")
+                    return print("ERROR: Variable is not declared. Variable: ", word)
         printed = printed.replace(',', '')
         print(printed)

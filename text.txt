@@ -1,2 +1,2 @@
-Age = 7      
+Age = 0
 OUTPUT "Hello, world! ", Age, " I love my people"S
