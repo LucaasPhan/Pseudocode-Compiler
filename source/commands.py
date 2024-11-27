@@ -20,46 +20,43 @@ class ASSIGN(command):
         # super allows to access all parenting classes
         super().__init__(startingLine, endingLine, currentLine)
         self.codeLine = codeLine
-        print("ASSIGN: ", self.codeLine)
+        # print("ASSIGN: ", self.codeLine)
 
     def run(self):
         # splitting the line by whitespace
         wordList = self.codeLine.split()
-        print(wordList)
+        # print(wordList)
         # taking in the variable name and the variable name and value
         varName = wordList[0]
         value = wordList[2]
 
         # storing it in the dictionary
         configures.variables[varName] = value
-        print(str(configures.variables)+"\n")
+        # print(str(configures.variables)+"\n")
       
 class OUTPUT(command) :
     def __init__(self, startingLine, endingLine, currentLine, codeLine):
         # super allows to access all parenting classes
         super().__init__(startingLine, endingLine, currentLine)
         self.codeLine = codeLine
-        print("__init__: ", self.codeLine)
+        # print("__init__: ", self.codeLine)
 
     def run(self):
         # splitting up the string by whitespace
         wordList = self.codeLine.split()
-        print(wordList)
         # we delete the first piece which is either PRINT or OUTPUT
         del wordList[0]
         # the ending string that will be printed
         printed = ""
         # using a string flag to keep track of whether it is a string or not
         string_flag = False
-        #pattern
-        pattern = 'r[^\s*$]'
 
-        print(wordList)
+        # print(wordList)
 
         # looping through the list of words 
         for index in range(len(wordList)):
             word = wordList[index]
-            print(string_flag, word)
+            # print(string_flag, word)
 
             # if the start of the word is "... flag thats its a string
             if word.startswith('\"') and not string_flag:
