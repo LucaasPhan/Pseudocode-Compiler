@@ -7,8 +7,13 @@ configures = datastore.configures()
 # stop code 
 error = False
 
-def is_special(s): # Regex to match any string that only contains special characters 
+def is_comma(s): # Regex to match any string that only contains special characters 
     return bool(re.fullmatch(r',', s))
+
+def detect_operators(s): 
+    pattern = r'[+\-*/^%]'
+    detected_operators = bool(re.findall(pattern, s))
+    return detected_operators
 
 class command():
     # constructing the class with a startingLine, endingLine, currentLine, this will be the parent class for child classes --> commands
@@ -25,23 +30,35 @@ class ASSIGN(command):
         # print("ASSIGN: ", self.codeLine)
 
     def run(self):
+        global error
         # splitting the line by whitespace
         wordList = re.findall(r'\"[^\"]*\"|\S+', self.codeLine)
         # print(wordList)
         # taking in the variable name and the variable name and value
-        varName = wordList[0]
-        value = wordList[2]
-                
-        #Detect if the value is a string or not, and is it put in double quote or not
-        if value[0] and value[-1] != '\"' and not value.isdigit():
-            global error
-            error = True
-            return print(f"ERROR: String datatype should be put inside double quote. -> {varName} = {value}")
-        elif value[0] and value[-1] == '\"':
-            value = value[1:-1]
-        # storing it in the dictionary
-        configures.variables[varName] = value
-        # print(str(configures.variables)+"\n")
+        if not error:
+            if len(wordList) > 3: 
+                if detect_operators(wordList[3]):
+                    error = True
+                    return print(f"ERROR: Compiler have not supported arithmetic operator for pseudocode yet -> {self.codeLine}")
+                else: 
+                    error = True 
+                    return print(f"ERROR: Unexpected character -> {self.codeLine}")
+            try: 
+                varName = wordList[0]
+                value = wordList[2]
+            except IndexError: 
+                error = True
+                return print(f"ERROR: Variable is not defined -> {self.codeLine}")
+                    
+            # Detect if the value is a string or not, and is it put in double quote or not
+            if value[0] and value[-1] != '\"' and not value.isdigit():
+                error = True
+                return print(f"ERROR: String datatype should be put inside double quote -> {self.codeLine}")
+            elif value[0] and value[-1] == '\"':
+                value = value[1:-1]
+            # storing it in the dictionary
+            configures.variables[varName] = value
+            # print(str(configures.variables)+"\n")
       
 class OUTPUT(command) :
     def __init__(self, startingLine, endingLine, currentLine, codeLine):
@@ -53,7 +70,7 @@ class OUTPUT(command) :
     def run(self):
         # splitting up the string by whitespace
         wordList = self.codeLine.split()
-        print("Word List:", wordList)
+        # print("Word List:", wordList)
         # we delete the first piece which is either PRINT or OUTPUT
         del wordList[0]
         # the ending string that will be printed
@@ -68,9 +85,9 @@ class OUTPUT(command) :
         # looping through the list of words 
         for index in range(len(wordList)):
             word = wordList[index]
-            print(string_flag, word)
+            # print(string_flag, word)
 
-            if is_special(word):
+            if is_comma(word):
                 continue
             
             # if the start of the word is "... flag thats its a string
@@ -84,7 +101,8 @@ class OUTPUT(command) :
                     printed += ""
                 elif word.__contains__('\"') and len(word) >= 2:
                     if word[-1] != '\"': 
-                        return print("ERROR: Unexpected character after quotation.")
+                        error = True
+                        return print(f"ERROR: Unexpected character after quotation -> {word} in line -> {self.codeLine}")
                     else: 
                         word = word[:-1]
                         printed += word  
@@ -97,6 +115,7 @@ class OUTPUT(command) :
                 if word in configures.variables:
                     printed += configures.variables[word] + " "
                 else:
-                    return print("ERROR: Variable is not declared. Variable: ", word)
+                    error = True
+                    return print(f"ERROR: Variable is not declared -> Variable: {word} in line -> {self.codeLine}")
         printed = printed.replace(',', '')
-        print(printed.strip())
+        print(printed)
