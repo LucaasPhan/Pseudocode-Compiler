@@ -1,2 +1,4 @@
-Age = 0
-OUTPUT "Hello, world! ", Age, " I love my people"
+Age = 100
+Text = "I love your mom 69"
+OUTPUT "Hello, world! I am ", Age, " years old"
+OUTPUT Text

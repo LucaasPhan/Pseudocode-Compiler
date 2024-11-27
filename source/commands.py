@@ -26,17 +26,19 @@ class ASSIGN(command):
 
     def run(self):
         # splitting the line by whitespace
-        wordList = self.codeLine.split()
+        wordList = re.findall(r'\"[^\"]*\"|\S+', self.codeLine)
         # print(wordList)
         # taking in the variable name and the variable name and value
         varName = wordList[0]
         value = wordList[2]
+                
         #Detect if the value is a string or not, and is it put in double quote or not
-        if value[0:-1] != '\"' and not value.isdigit():
+        if value[0] and value[-1] != '\"' and not value.isdigit():
             global error
             error = True
-            return print("ERROR: String datatype should be put inside double quote.")
-
+            return print(f"ERROR: String datatype should be put inside double quote. -> {varName} = {value}")
+        elif value[0] and value[-1] == '\"':
+            value = value[1:-1]
         # storing it in the dictionary
         configures.variables[varName] = value
         # print(str(configures.variables)+"\n")
@@ -65,7 +67,7 @@ class OUTPUT(command) :
         # looping through the list of words 
         for index in range(len(wordList)):
             word = wordList[index]
-            print(string_flag, word)
+            # print(string_flag, word)
 
             # if the start of the word is "... flag thats its a string
             if word.startswith('\"') and not string_flag:
