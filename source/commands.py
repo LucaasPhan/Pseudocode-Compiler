@@ -8,7 +8,7 @@ configures = datastore.configures()
 error = False
 
 def is_special(s): # Regex to match any string that only contains special characters 
-    return bool(re.fullmatch(r'[\'\",]', s))
+    return bool(re.fullmatch(r',', s))
 
 class command():
     # constructing the class with a startingLine, endingLine, currentLine, this will be the parent class for child classes --> commands
@@ -53,6 +53,7 @@ class OUTPUT(command) :
     def run(self):
         # splitting up the string by whitespace
         wordList = self.codeLine.split()
+        print("Word List:", wordList)
         # we delete the first piece which is either PRINT or OUTPUT
         del wordList[0]
         # the ending string that will be printed
@@ -67,8 +68,11 @@ class OUTPUT(command) :
         # looping through the list of words 
         for index in range(len(wordList)):
             word = wordList[index]
-            # print(string_flag, word)
+            print(string_flag, word)
 
+            if is_special(word):
+                continue
+            
             # if the start of the word is "... flag thats its a string
             if word.startswith('\"') and not string_flag:
                 string_flag = True
@@ -83,9 +87,7 @@ class OUTPUT(command) :
                         return print("ERROR: Unexpected character after quotation.")
                     else: 
                         word = word[:-1]
-                        printed += word
-                elif is_special(word):
-                    string_flag = False     
+                        printed += word  
                 elif word == '' or word == ' ':
                     string_flag = True  
                 else: 
@@ -97,4 +99,4 @@ class OUTPUT(command) :
                 else:
                     return print("ERROR: Variable is not declared. Variable: ", word)
         printed = printed.replace(',', '')
-        print(printed)
+        print(printed.strip())
