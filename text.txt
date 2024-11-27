@@ -1,4 +1,4 @@
-Age = "10"
-Text = "The Hottest Fish" 
-OUTPUT "Hello, world! I am ", Age, " years old", Number
-OUTPUT Text
+Age = 10
+Fish = "the Hottest Fish" 
+OUTPUT "Hello, world!"
+OUTPUT "I love ", Fish, "!"

@@ -65,7 +65,6 @@ class OUTPUT(command) :
         # super allows to access all parenting classes
         super().__init__(startingLine, endingLine, currentLine)
         self.codeLine = codeLine
-        # print("__init__: ", self.codeLine)
 
     def run(self):
         # splitting up the string by whitespace
@@ -79,7 +78,6 @@ class OUTPUT(command) :
         string_flag = False
 
         global error
-        # print(wordList)
         if error: 
             return
         # looping through the list of words 
@@ -98,7 +96,7 @@ class OUTPUT(command) :
             if string_flag:
                 if word.__contains__('\",'):
                     string_flag = False
-                    printed += ""
+                    continue
                 elif word.__contains__('\"') and len(word) >= 2:
                     if word[-1] != '\"': 
                         error = True
@@ -108,6 +106,9 @@ class OUTPUT(command) :
                         printed += word  
                 elif word == '' or word == ' ':
                     string_flag = True  
+                elif word[-1] != ',' and word.__contains__('\"') and wordList[index + 1][0:-1] != '\"' and not wordList[index] == (len(wordList) - 1):
+                    error = True
+                    return print(f"ERROR: Missing expected comma after the output -> {self.codeLine}")
                 else: 
                     printed += word + " "
             else: 
