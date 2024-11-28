@@ -1,5 +1,5 @@
 import re
-import src.deploy_command as deploy_command
+import src.deploy_commands as deploy_command
 
 deploy = deploy_command.deployCommand
 # this function extracts the name of the file from the filepath

@@ -27,10 +27,9 @@ class OUTPUT(command):
         configures = globals.configures
         is_comma = globals.is_comma
         detect_operators = globals.detect_operators
-        error = globals.error
 
         # error => stop
-        if error: 
+        if globals.error: 
             return
         # looping through the list of words 
         for index, word in enumerate(wordList):
@@ -43,13 +42,13 @@ class OUTPUT(command):
             
             # detect operators within the line (arithmetic operators not supported yet)
             if detect_operators(word):
-                error = True
+                globals.error = True
                 return print(f"ERROR: Compiler have not supported arithmetic operator for pseudocode yet -> {self.codeLine}")
 
             # Syntax error detection
             if index > 0 and not (word.startswith('\"') or word.startswith(',')): 
                 if not wordList[index - 1].endswith(','): 
-                    error = True 
+                    globals.error = True 
                     return print(f"ERROR: Variable or component not separated by a comma -> {word} in line -> {self.codeLine}")
 
             # main process
@@ -60,6 +59,6 @@ class OUTPUT(command):
                 if word in configures.variables:
                     printed += configures.variables[word]
                 else:
-                    error = True
+                    globals.error = True
                     return print(f"ERROR: Variable is not declared -> Variable: {word} in line -> {self.codeLine}")
         print(printed)

@@ -1,4 +1,4 @@
-Age = 10
+times = 1000000
 Fish = "the Hottest Fish"
-OUTPUT "Hello, world! ", Age
-OUTPUT "I love ", Fish, "!"
+OUTPUT "Hello, world! "
+OUTPUT "I love ", Fish, " x", times, "!"
