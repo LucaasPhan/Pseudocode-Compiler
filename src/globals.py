@@ -1,5 +1,5 @@
 # importing configures from data_store.py as config
-import source.datastore as datastore
+import src.datastore as datastore
 import re
 
 # creating a configure class for storage

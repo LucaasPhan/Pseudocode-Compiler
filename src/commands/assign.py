@@ -1,4 +1,4 @@
-import source.globals as globals 
+import src.globals as globals 
 import re
 
 class command():

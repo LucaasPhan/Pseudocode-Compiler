@@ -1,0 +1,48 @@
+classes:
+DECLARE...:TYPE
+ASSIGN...
+PRINT...
+OUTPUT...
+INPUT...
+
+FOR...TO
+NEXT
+
+WHILE...DO
+ENDWHILE
+
+REPEAT 
+UNTIL...
+
+IF...THEN
+ELSE
+ENDIF 
+
+CASE OF...
+OTHERWISE..
+ENDCASE
+
+library routines(these aint no commands, they are functions)
+MOD(number, modulus)
+DIV(number, divisor)
+RANDOM() // returns between 0 and 1
+ROUND(number, degree)
+LCASE(string)
+UCASE(string) 
+SUBSTRING(string, start, length)
+LENGTH(...)
+
+PROCEDURE...
+ENDPROCEDURE
+
+FUNCTION...RETURNS...
+ENDFUNCTION 
+
+CALL...
+
+OPEN...FOR...
+WRITEFILE, ...
+READFILE, ...
+CLOSEFILE(...) 
+
+//   
