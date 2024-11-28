@@ -7,7 +7,7 @@ class command():
         self.end = endingLine
         self.current = currentLine
 
-class CommandFactory:
+class deployCommand:
     @staticmethod
     def create_command(command_type, startingLine, endingLine, currentLine, codeLine):
         if command_type == "ASSIGN":

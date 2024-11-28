@@ -1,6 +1,7 @@
 import re
 import src.deploy_command as deploy_command
 
+deploy = deploy_command.deployCommand
 # this function extracts the name of the file from the filepath
 def getFileName(filePath):
     # turning the file path into a raw string
@@ -67,12 +68,12 @@ for index in range(len(linesNW)):
     if linesNW[index][:6] == "OUTPUT" or linesNW[index][:5] == "PRINT":
         # print("OUTPUT detected")
         # print("OUTPUT DEBUG: ", linesW[index])
-        programObject.append(deploy_command.CommandFactory.create_command("OUTPUT", index, index, index, linesW[index]))
+        programObject.append(deploy.create_command("OUTPUT", index, index, index, linesW[index]))
         
     elif "=" == splitedLine[1]:
         # print("ASSIGN detected")
         # print("ASSIGN DEBUG: ", linesW[index])
-        programObject.append(deploy_command.CommandFactory.create_command("ASSIGN", index, index, index, linesW[index]))
+        programObject.append(deploy.create_command("ASSIGN", index, index, index, linesW[index]))
         
 for obj in programObject:
     obj.run()
