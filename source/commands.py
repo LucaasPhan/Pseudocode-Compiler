@@ -68,7 +68,7 @@ class OUTPUT(command) :
 
     def run(self):
         # splitting up the string by whitespace
-        wordList = self.codeLine.split()
+        wordList = re.findall(r'\"[^\"]*\"|[^\s]+', self.codeLine)
         # print("Word List:", wordList)
         # we delete the first piece which is either PRINT or OUTPUT
         del wordList[0]
@@ -81,42 +81,33 @@ class OUTPUT(command) :
         if error: 
             return
         # looping through the list of words 
-        for index in range(len(wordList)):
+        for index, word in enumerate(wordList):
             word = wordList[index]
             # print(string_flag, word)
 
-            if is_comma(word):
+            # comma only => skip
+            if is_comma(word): 
                 continue
             
-            # if the start of the word is "... flag thats its a string
-            if word.startswith('\"') and not string_flag:
-                string_flag = True
-                word = word[1:]
+            # detect operators within the line (arithmetic operators not supported yet)
+            if detect_operators(word):
+                error = True
+                return print(f"ERROR: Compiler have not supported arithmetic operator for pseudocode yet -> {self.codeLine}")
 
-            if string_flag:
-                if word.__contains__('\",'):
-                    string_flag = False
-                    continue
-                elif word.__contains__('\"') and len(word) >= 2:
-                    if word[-1] != '\"': 
-                        error = True
-                        return print(f"ERROR: Unexpected character after quotation -> {word} in line -> {self.codeLine}")
-                    else: 
-                        word = word[:-1]
-                        printed += word  
-                elif word == '' or word == ' ':
-                    string_flag = True  
-                elif word[-1] != ',' and word.__contains__('\"') and wordList[index + 1][0:-1] != '\"' and not wordList[index] == (len(wordList) - 1):
-                    error = True
-                    return print(f"ERROR: Missing expected comma after the output -> {self.codeLine}")
-                else: 
-                    printed += word + " "
-            else: 
+            # Syntax error detection
+            if index > 0 and not (word.startswith('\"') or word.startswith(',')): 
+                if not wordList[index - 1].endswith(','): 
+                    error = True 
+                    return print(f"ERROR: Variable or component not separated by a comma -> {word} in line -> {self.codeLine}")
+
+            # main process
+            if word.startswith('\"') and word.endswith('\"'):   
+                printed += word[1:-1]
+            else: # process for variables
                 word = word.rstrip(',')
                 if word in configures.variables:
-                    printed += configures.variables[word] + " "
+                    printed += configures.variables[word]
                 else:
                     error = True
                     return print(f"ERROR: Variable is not declared -> Variable: {word} in line -> {self.codeLine}")
-        printed = printed.replace(',', '')
         print(printed)

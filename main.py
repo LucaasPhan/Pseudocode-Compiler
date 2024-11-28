@@ -23,7 +23,7 @@ def seperateIntoLines(text):
     line = ''
     charCount = 0
     # reading each character from the code
-    for char in text:   
+    for char in text:
         # if its a new line the line is added to the lines list
         if char == '\n':
             lines.append(line)

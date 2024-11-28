@@ -1,4 +1,4 @@
 Age = 10
-Fish = "the Hottest Fish" 
-OUTPUT "Hello, world!"
+Fish = "the Hottest Fish"
+OUTPUT "Hello, world! ", Age
 OUTPUT "I love ", Fish, "!"
