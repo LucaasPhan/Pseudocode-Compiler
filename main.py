@@ -1,5 +1,7 @@
 import re
 import src.deploy_commands as deploy_command
+import src.datastore as datastore
+import src.operators_handler as opHandler
 
 deploy = deploy_command.deployCommand
 # this function extracts the name of the file from the filepath
@@ -58,7 +60,6 @@ linesW = seperateIntoLines(read)
 linesNW = removeWhitespace(linesW)
 # print("LinesNW: ", linesNW)
 
-
 programObject = []
 
 for index in range(len(linesNW)):
@@ -70,7 +71,7 @@ for index in range(len(linesNW)):
         # print("OUTPUT DEBUG: ", linesW[index])
         programObject.append(deploy.create_command("OUTPUT", index, index, index, linesW[index]))
         
-    elif "=" == splitedLine[1]:
+    elif splitedLine[1] in opHandler.operators or datastore.configures.operatorList:
         # print("ASSIGN detected")
         # print("ASSIGN DEBUG: ", linesW[index])
         programObject.append(deploy.create_command("ASSIGN", index, index, index, linesW[index]))

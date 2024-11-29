@@ -1,4 +1,5 @@
 import src.globals as globals 
+import src.operators_handler as opHandler
 import re
 
 class command():
@@ -24,11 +25,6 @@ class ASSIGN(command):
         # taking in the variable name and the variable name and value
         if globals.error:
             return
-        if wordList[1] == '=':
-            pass
-        else: 
-            globals.error = True
-            return print(f"ERROR: Variable syntax += >= <= not yet supported -> {self.codeLine}")
         if len(wordList) > 3: 
             if detect_operators(wordList[3]):
                 globals.error = True
@@ -41,8 +37,20 @@ class ASSIGN(command):
             value = wordList[2]
         except IndexError: 
             globals.error = True
-            return print(f"ERROR: Variable is not defined -> {self.codeLine}")
-                
+            return print(f"ERROR: Variable is not defined -> {self.codeLine}")   
+        if wordList[1] == '=':
+            pass
+        else: 
+            operator = wordList[1] 
+            if operator in opHandler.operators: 
+                if varName in configures.variables:
+                    return opHandler.operators[operator](varName, value)
+                else: 
+                    error = True
+                    return print("?")
+            else: 
+                globals.error = True 
+                return print(f"ERROR: Unexpected character or operator -> {self.codeLine}")             
         # Detect if the value is a string or not, and is it put in double quote or not
         if value[0] and value[-1] != '\"' and not value.isdigit():
             globals.error = True
@@ -51,4 +59,4 @@ class ASSIGN(command):
             value = value[1:-1]
         # storing it in the dictionary
         configures.variables[varName] = value
-        # print(str(configures.variables)+"\n")
+        # print(str(configures.variables))
