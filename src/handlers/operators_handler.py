@@ -9,7 +9,7 @@ def handle_add(varName, value):
         return True
     else: 
         globals.error = True
-        return print("?")
+        return print(f"ERROR: Expected a integer value -> {value}")
 
 def handle_subtract(varName, value):
     if value.isdigit():
@@ -17,9 +17,10 @@ def handle_subtract(varName, value):
         return True
     else: 
         globals.error = True
-        return print("?")
+        return print(f"ERROR: Expected a integer value -> {value}")
+
     
 operators = { 
-                '+=': handle_add, 
-                '-=': handle_subtract, 
-                }
+            '+=': handle_add, 
+            '-=': handle_subtract, 
+            }

@@ -1,7 +1,7 @@
 import re
-import src.deploy_commands as deploy_command
+import src.handlers.commands_handler as deploy_command
 import src.datastore as datastore
-import src.operators_handler as opHandler
+import src.handlers.operators_handler as opHandler
 
 deploy = deploy_command.deployCommand
 # this function extracts the name of the file from the filepath

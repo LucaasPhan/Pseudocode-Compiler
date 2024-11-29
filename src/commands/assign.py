@@ -1,5 +1,5 @@
 import src.globals as globals 
-import src.operators_handler as opHandler
+import src.handlers.operators_handler as opHandler
 import re
 
 class command():
@@ -47,7 +47,7 @@ class ASSIGN(command):
                     return opHandler.operators[operator](varName, value)
                 else: 
                     error = True
-                    return print("?")
+                    return print(f"ERROR: Unknown operator -> {operator} -> {self.codeLine}")
             else: 
                 globals.error = True 
                 return print(f"ERROR: Unexpected character or operator -> {self.codeLine}")             

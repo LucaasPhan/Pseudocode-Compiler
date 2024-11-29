@@ -1,3 +1,4 @@
 .vscode
 src/__pycache__
 src/commands/__pycache__
+src/handlers/__pycache__

@@ -1,6 +1,5 @@
 # importing configures from data_store.py as config
 import src.datastore as datastore
-import src.operators_handler as operator
 import re
 
 # creating a configure class for storage

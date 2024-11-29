@@ -1,5 +1,5 @@
 times = 1
-times += hello
+times -= 2
 Fish = "the Hottest Fish"
 OUTPUT "Hello, world! "
 OUTPUT "I love ", Fish, " x", times, "!"
