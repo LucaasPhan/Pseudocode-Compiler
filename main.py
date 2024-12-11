@@ -1,7 +1,6 @@
 import re
 import src.handlers.commands_handler as deploy_command
 import src.datastore as datastore
-import src.handlers.operators_handler as opHandler
 
 deploy = deploy_command.deployCommand
 # this function extracts the name of the file from the filepath
@@ -48,7 +47,7 @@ def removeWhitespace(lines):
 
 # taking in file path
 # fileInPath = input("Please enter the filepath where your pseudocode is stored: ")
-fileInPath = "C:/Users/nhath/OneDrive/Documents/Pseudocode-Compiler/text.txt"
+fileInPath = input()
 
 # reading the pseudocode text file 
 with open(fileInPath, "r") as file:
@@ -71,7 +70,7 @@ for index in range(len(linesNW)):
         # print("OUTPUT DEBUG: ", linesW[index])
         programObject.append(deploy.create_command("OUTPUT", index, index, index, linesW[index]))
         
-    elif splitedLine[1] in opHandler.operators or datastore.configures.operatorList:
+    elif splitedLine[1] == '=' or datastore.configures.operatorList:
         # print("ASSIGN detected")
         # print("ASSIGN DEBUG: ", linesW[index])
         programObject.append(deploy.create_command("ASSIGN", index, index, index, linesW[index]))

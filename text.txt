@@ -1,5 +1,4 @@
-times = 1
-times -= 2
+times = 1 - 3
 Fish = "the Hottest Fish"
 OUTPUT "Hello, world! "
 OUTPUT "I love ", Fish, " x", times, "!"

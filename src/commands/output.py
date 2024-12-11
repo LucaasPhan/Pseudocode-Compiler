@@ -57,7 +57,7 @@ class OUTPUT(command):
             else: # process for variables
                 word = word.rstrip(',')
                 if word in configures.variables:
-                    printed += configures.variables[word]
+                    printed += str(configures.variables[word])
                 else:
                     globals.error = True
                     return print(f"ERROR: Variable is not declared -> Variable: {word} in line -> {self.codeLine}")

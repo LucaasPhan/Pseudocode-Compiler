@@ -1,6 +1,7 @@
 import src.globals as globals 
-import src.handlers.operators_handler as opHandler
+import src.handlers.operators_handler as operator
 import re
+import math
 
 class command():
     def __init__(self, startingLine=0, endingLine=0, currentLine=0):
@@ -25,15 +26,22 @@ class ASSIGN(command):
         # taking in the variable name and the variable name and value
         if globals.error:
             return
-        if len(wordList) > 3: 
-            if detect_operators(wordList[3]):
-                globals.error = True
-                return print(f"ERROR: Compiler have not supported arithmetic operator for pseudocode yet -> {self.codeLine}")
-            else: 
-                globals.error = True 
-                return print(f"ERROR: Unexpected character -> {self.codeLine}")
         try: 
             varName = wordList[0]
+            if len(wordList) > 3: 
+                if detect_operators(wordList[3]):
+                    op = wordList[3]
+                    v = []
+                    for i in range(2, len(wordList)):
+                        if wordList[i].isdigit():
+                            v.append(int(wordList[i]))
+                        else:
+                            continue
+                    if op in operator.operators:
+                        return operator.operators[op](varName, v)
+                else: 
+                    globals.error = True 
+                    return print(f"ERROR: Unexpected character -> {self.codeLine}")
             value = wordList[2]
         except IndexError: 
             globals.error = True
@@ -41,18 +49,10 @@ class ASSIGN(command):
         if wordList[1] == '=':
             pass
         else: 
-            operator = wordList[1] 
-            if operator in opHandler.operators: 
-                if varName in configures.variables:
-                    return opHandler.operators[operator](varName, value)
-                else: 
-                    error = True
-                    return print(f"ERROR: Unknown operator -> {operator} -> {self.codeLine}")
-            else: 
-                globals.error = True 
-                return print(f"ERROR: Unexpected character or operator -> {self.codeLine}")             
+            globals.error = True 
+            return print(f"ERROR: Unexpected character or operator -> {self.codeLine}")             
         # Detect if the value is a string or not, and is it put in double quote or not
-        if value[0] and value[-1] != '\"' and not value.isdigit():
+        if value[0] and value[-1] != '\"':
             globals.error = True
             return print(f"ERROR: String datatype should be put inside double quote -> {self.codeLine}")
         elif value[0] and value[-1] == '\"':
